@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find your Facebook account by entering your email or phone number.">
   <title>Find Your Account – Facebook</title>
+  <link rel="icon" type="image/png" href="https://static.xx.fbcdn.net/rsrc.php/yI/r/8wPQr1tHLVJ.png">
   <style>
     * {
       margin: 0;
@@ -22,59 +24,76 @@
     }
     .container {
       background: white;
-      width: 400px;
+      width: 432px;
       max-width: 100%;
-      padding: 20px;
+      padding: 20px 24px;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
       animation: fadeIn 0.5s ease-in;
     }
     .container h2 {
       font-size: 24px;
       color: #1c1e21;
-      margin-bottom: 20px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .container p {
+      font-size: 14px;
+      color: #606770;
+      margin-bottom: 16px;
     }
     .container input {
       width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      font-size: 16px;
+      padding: 14px 16px;
+      margin: 8px 0;
+      font-size: 17px;
       border: 1px solid #dddfe2;
       border-radius: 6px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .container input:focus {
+      outline: none;
+      border-color: #1877f2;
+      box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
     }
     .container button {
       width: 100%;
-      padding: 14px;
-      margin-top: 10px;
+      padding: 14px 16px;
+      margin: 12px 0;
       background-color: #1877f2;
       color: white;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
     }
     .container button:hover {
-      background-color: #165db7;
+      background-color: #166fe5;
+      transform: scale(1.02);
     }
     .cancel-btn {
-      background: #e4e6eb;
-      color: #1c1e21;
+      background: #f5f6f5;
+      color: #4b4f56;
+      font-weight: 600;
     }
     .cancel-btn:hover {
-      background: #d8dade;
+      background: #e7e8ea;
+      transform: scale(1.02);
     }
     .line {
       height: 1px;
-      background: #dddfe2;
-      margin: 20px 0;
+      background: #dadde1;
+      margin: 16px 0;
     }
     a {
       color: #1877f2;
       text-decoration: none;
       text-align: center;
       display: block;
-      margin-top: 15px;
+      font-size: 14px;
+      margin-top: 12px;
     }
     a:hover {
       text-decoration: underline;
@@ -85,7 +104,7 @@
     }
     @media screen and (max-width: 400px) {
       .container {
-        width: 90%;
+        width: 100%;
       }
     }
   </style>
@@ -94,7 +113,7 @@
   <div class="container">
     <h2>Find Your Account</h2>
     <p>Please enter your email address or phone number to search for your account.</p>
-    <form>
+    <form id="forgotForm">
       <input type="text" placeholder="Email or phone number" required>
       <div class="line"></div>
       <button type="submit">Search</button>
@@ -104,9 +123,11 @@
   </div>
 
   <script>
-    document.querySelector('form').addEventListener('submit', function(e) {
+    document.getElementById('forgotForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert('Searching for account... (This is a prank page, no real action taken.)');
+      setTimeout(() => {
+        window.location.href = 'index.html'; // Simulate search redirect
+      }, 1500);
     });
   </script>
 </body>
