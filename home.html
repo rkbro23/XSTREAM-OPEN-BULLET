@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Welcome to Facebook!">
+  <title>Facebook</title>
+  <link rel="icon" type="image/png" href="https://static.xx.fbcdn.net/rsrc.php/yI/r/8wPQr1tHLVJ.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      width: 500px;
+      max-width: 100%;
+      padding: 20px 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+      text-align: center;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .container h2 {
+      font-size: 24px;
+      color: #1c1e21;
+      margin-bottom: 16px;
+    }
+    .container p {
+      font-size: 16px;
+      color: #606770;
+    }
+    a {
+      color: #1877f2;
+      text-decoration: none;
+      font-size: 14px;
+      margin-top: 16px;
+      display: inline-block;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media screen and (max-width: 400px) {
+      .container {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome to Facebook!</h2>
+    <p>You've successfully logged in or signed up. Start connecting with friends!</p>
+    <a href="index.html">Back to login</a>
+  </div>
+</body>
+</html>
